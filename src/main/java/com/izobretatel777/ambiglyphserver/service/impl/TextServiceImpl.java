@@ -1,7 +1,6 @@
 package com.izobretatel777.ambiglyphserver.service.impl;
 
 import com.izobretatel777.ambiglyphserver.dao.entity.Word;
-import com.izobretatel777.ambiglyphserver.dao.repo.UserRepo;
 import com.izobretatel777.ambiglyphserver.dao.repo.WordRepo;
 import com.izobretatel777.ambiglyphserver.dto.TextRequestDto;
 import com.izobretatel777.ambiglyphserver.dto.TextResponseDto;
@@ -11,7 +10,6 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
