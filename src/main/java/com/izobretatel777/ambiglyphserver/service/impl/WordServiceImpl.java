@@ -9,7 +9,6 @@ import com.izobretatel777.ambiglyphserver.dto.WordResponseDto;
 import com.izobretatel777.ambiglyphserver.mapper.WordMapper;
 import com.izobretatel777.ambiglyphserver.service.WordService;
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
