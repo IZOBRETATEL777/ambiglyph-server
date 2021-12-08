@@ -13,5 +13,8 @@ import java.util.List;
 @Builder
 public class TextResponseDto {
     private String text;
-    List<List<String>> candidates;
+    private List<List<String>> candidates;
+    private List<List<HomoglyphResponseDto>> warnings;
+    private boolean haveDetections;
+    private boolean haveWarnings;
 }

@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class TextRequestDto {
     private Long userId;
     private String text;
+    private long suggestionsNumber;
+    private long warningsNumber;
 }
