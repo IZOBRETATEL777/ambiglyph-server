@@ -97,16 +97,15 @@ public class TextServiceImpl implements TextService {
                 .warnings(warnings).haveWarnings(warningIdx > 0).build();
     }
 
-    private String normalizeCase(String word, String patterWord) throws IllegalArgumentException {
-        if (word.length() != patterWord.length()) {
-            throw new IllegalArgumentException();
-        }
+    private String normalizeCase(String word, String patterWord){
         StringBuilder mutable = new StringBuilder(word);
-        for (int i = 0; i < patterWord.length(); i++) {
-            if (isUpperCase(word.charAt(i)) && isLowerCase(mutable.charAt(i))) {
+        for (int i = 0; i < Math.min(mutable.length(), patterWord.length()); i++) {
+            if (!isAlphabetic(mutable.charAt(i)))
+                continue;
+            if (isUpperCase(patterWord.charAt(i)) && isLowerCase(mutable.charAt(i))) {
                 mutable.setCharAt(i, toUpperCase(mutable.charAt(i)));
             }
-            else if (isLowerCase(word.charAt(i)) && isUpperCase(mutable.charAt(i))) {
+            else if (isLowerCase(patterWord.charAt(i)) && isUpperCase(mutable.charAt(i))) {
                 mutable.setCharAt(i, toLowerCase(mutable.charAt(i)));
             }
         }
