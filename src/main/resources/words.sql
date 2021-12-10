@@ -1,4 +1,6 @@
-insert into word(word) values ("aardvark"),
+insert into word(word) values
+("a"),
+("aardvark"),
 ("aardwolf"),
 ("aaron"),
 ("aback"),
