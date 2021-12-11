@@ -7,6 +7,7 @@ import com.izobretatel777.ambiglyphserver.dto.UserResponseDto;
 import com.izobretatel777.ambiglyphserver.mapper.UserMapper;
 import com.izobretatel777.ambiglyphserver.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepo userEntityRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserResponseDto> getUsers() {
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
     public Long saveUser(UserRequestDto userRequestDto) {
         User user = new User();
         user.setLogin(userRequestDto.getLogin());
-        user.setPassword(userRequestDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         user.setActive(true);
         return userEntityRepository.save(user).getId();
     }
