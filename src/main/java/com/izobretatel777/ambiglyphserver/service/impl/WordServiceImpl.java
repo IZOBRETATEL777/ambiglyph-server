@@ -1,6 +1,5 @@
 package com.izobretatel777.ambiglyphserver.service.impl;
 
-import com.izobretatel777.ambiglyphserver.dao.entity.User;
 import com.izobretatel777.ambiglyphserver.dao.entity.Word;
 import com.izobretatel777.ambiglyphserver.dao.repo.UserRepo;
 import com.izobretatel777.ambiglyphserver.dao.repo.WordRepo;
@@ -25,15 +24,13 @@ public class WordServiceImpl implements WordService {
     @Override
     public List<WordResponseDto> getWords() {
         var entities = wordRepo.findAll();
-        var response = wordMapper.toResponseDto(entities);
-        return response;
+        return wordMapper.toResponseDto(entities);
     }
 
     @Override
     public WordResponseDto getWordById(Long id) {
-        var entity = wordRepo.findById(id).get();
-        var response = wordMapper.toResponseDto(entity);
-        return response;
+        var entity = wordRepo.findById(id);
+        return entity.map(wordMapper::toResponseDto).orElse(null);
     }
 
     @Override
@@ -46,7 +43,7 @@ public class WordServiceImpl implements WordService {
         else {
             word = new Word();
             word.setText(wordRequestDto.getText());
-            word.setUsers(new LinkedList<User>());
+            word.setUsers(new LinkedList<>());
         }
         word.getUsers().add(userRepo.getById(wordRequestDto.getUserId()));
         return wordRepo.save(word).getId();
@@ -54,6 +51,8 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public void deleteWordById(Long id) {
-        wordRepo.deleteById(id);
+        if (wordRepo.existsById(id)) {
+            wordRepo.deleteById(id);
+        }
     }
 }

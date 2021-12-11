@@ -1,6 +1,7 @@
 package com.izobretatel777.ambiglyphserver.service.impl;
 
 import com.izobretatel777.ambiglyphserver.dao.entity.Homoglyph;
+import com.izobretatel777.ambiglyphserver.dao.entity.User;
 import com.izobretatel777.ambiglyphserver.dao.entity.Word;
 import com.izobretatel777.ambiglyphserver.dao.repo.HomoglyphRepo;
 import com.izobretatel777.ambiglyphserver.dao.repo.WordRepo;
@@ -35,7 +36,7 @@ public class TextServiceImpl implements TextService {
         List<Homoglyph> homoglyphList = homoglyphRepo.findAll()
                 .stream().filter(h->textRequestDto.getText().indexOf(h.getSpoofed()) != -1).collect(Collectors.toList());
         for (Word word: wordService.findAll()) {
-            if (word.getUsers().stream().map(u->u.getId()).anyMatch(id->id == textRequestDto.getUserId() || id == 1))
+            if (word.getUsers().stream().map(User::getId).anyMatch(id->id == textRequestDto.getUserId() || id == 1))
                 dictionary.add(word.getText());
         }
         List<Integer> distances = new ArrayList<>(dictionary.size());
