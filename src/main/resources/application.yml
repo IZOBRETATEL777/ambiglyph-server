@@ -1,3 +1,6 @@
+jwt:
+  secret-key: MY_SECRET_KEY
+
 server:
   port: 8081
   servlet:
@@ -14,3 +17,4 @@ spring:
 #    show-sql: true
     hibernate:
       ddl-auto: update
+#debug: true
