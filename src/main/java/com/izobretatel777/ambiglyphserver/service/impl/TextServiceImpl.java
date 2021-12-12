@@ -4,6 +4,7 @@ import com.izobretatel777.ambiglyphserver.dao.entity.Homoglyph;
 import com.izobretatel777.ambiglyphserver.dao.entity.User;
 import com.izobretatel777.ambiglyphserver.dao.entity.Word;
 import com.izobretatel777.ambiglyphserver.dao.repo.HomoglyphRepo;
+import com.izobretatel777.ambiglyphserver.dao.repo.UserRepo;
 import com.izobretatel777.ambiglyphserver.dao.repo.WordRepo;
 import com.izobretatel777.ambiglyphserver.dto.HomoglyphResponseDto;
 import com.izobretatel777.ambiglyphserver.dto.TextRequestDto;
@@ -13,6 +14,8 @@ import com.izobretatel777.ambiglyphserver.service.TextService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,6 +29,7 @@ public class TextServiceImpl implements TextService {
     private final WordRepo wordRepo;
     private final HomoglyphRepo homoglyphRepo;
     private final HomoglyphMapper homoglyphMapper;
+    private final UserRepo userRepo;
 
     final String META_DETECTED = "<%%ambiglyph-detected>%d<ambiglyph-detected%%>";
     final String META_WARNING = "<%%ambiglyph-warning>%d<ambiglyph-warning%%>";
@@ -33,7 +37,8 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextResponseDto recoverText(TextRequestDto textRequestDto) {
         List<String> text = Arrays.asList(textRequestDto.getText().split("\\b"));
-        List<String> dictionary = wordRepo.findWordsTextByUserId(textRequestDto.getUserId());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<String> dictionary = wordRepo.findWordsTextByUserId(userRepo.findIdByLogin(authentication.getName()));
         dictionary.addAll(wordRepo.findWordsTextByUserId(1L));
         List<Homoglyph> homoglyphList = homoglyphRepo.getHomoglyphBySpoofedIn(textRequestDto.getText().chars().mapToObj(e->(char)e).collect(Collectors.toList()));
         String homoglyphCharset = StringUtils.join(homoglyphList.stream().map(Homoglyph::getSpoofed).collect(Collectors.toList()), "");

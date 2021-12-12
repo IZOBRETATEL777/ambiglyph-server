@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class WordRequestDto {
-    private Long id;
     private String text;
     private Long userId;
 }

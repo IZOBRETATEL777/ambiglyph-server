@@ -10,4 +10,5 @@ public interface UserService {
     UserResponseDto getUserById(Long id);
     Long saveUser(UserRequestDto UserRequestDto);
     void deleteUserById(Long id);
+    UserResponseDto getUser();
 }
