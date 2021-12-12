@@ -29,6 +29,9 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "role")
+    private String role;
+
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Word> words;
 }

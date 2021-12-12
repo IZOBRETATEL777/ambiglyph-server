@@ -23,8 +23,8 @@ public class JwtAuthenticationController {
 
     @PostMapping
     public ResponseEntity<?> authenticate(@RequestBody JwtRequest jwtRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), jwtRequest.getPassword()));
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(jwtRequest.getUsername());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getLogin(), jwtRequest.getPassword()));
+        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(jwtRequest.getLogin());
         String token = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
