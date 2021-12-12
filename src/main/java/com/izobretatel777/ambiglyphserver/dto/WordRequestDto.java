@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @Data
 public class WordRequestDto {
     private String text;
-    private Long userId;
 }

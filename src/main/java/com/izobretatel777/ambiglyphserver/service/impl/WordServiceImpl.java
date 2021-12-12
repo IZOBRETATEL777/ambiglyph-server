@@ -8,10 +8,15 @@ import com.izobretatel777.ambiglyphserver.dto.WordResponseDto;
 import com.izobretatel777.ambiglyphserver.mapper.WordMapper;
 import com.izobretatel777.ambiglyphserver.service.WordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -23,7 +28,9 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public List<WordResponseDto> getWords() {
-        var entities = wordRepo.findAll();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        var entities = wordRepo.findWordsByUserId(userRepo.findIdByLogin(currentPrincipalName));
         return wordMapper.toResponseDto(entities);
     }
 
@@ -45,14 +52,22 @@ public class WordServiceImpl implements WordService {
             word.setText(wordRequestDto.getText());
             word.setUsers(new LinkedList<>());
         }
-        word.getUsers().add(userRepo.getById(wordRequestDto.getUserId()));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = userRepo.findIdByLogin(authentication.getName());
+        word.getUsers().add(userRepo.getById(userId));
         return wordRepo.save(word).getId();
     }
 
     @Override
     public void deleteWordById(Long id) {
-        if (wordRepo.existsById(id)) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        List<Word> entities = wordRepo.findWordsByUserId(userRepo.findIdByLogin(currentPrincipalName));
+        if (entities.stream().anyMatch(w-> Objects.equals(w.getId(), id))) {
             wordRepo.deleteById(id);
+        }
+        else {
+            throw new AccessDeniedException("");
         }
     }
 }
