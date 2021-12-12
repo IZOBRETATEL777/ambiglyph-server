@@ -1,3 +1,5 @@
+delete from word;
+ALTER TABLE word AUTO_INCREMENT = 1;
 insert into word(word) values
 ("a"),
 ("aardvark"),
