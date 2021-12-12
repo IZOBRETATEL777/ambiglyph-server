@@ -11,6 +11,7 @@ import com.izobretatel777.ambiglyphserver.dto.TextResponseDto;
 import com.izobretatel777.ambiglyphserver.mapper.HomoglyphMapper;
 import com.izobretatel777.ambiglyphserver.service.TextService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class TextServiceImpl implements TextService {
         List<String> dictionary = wordRepo.findWordsTextByUserId(textRequestDto.getUserId());
         dictionary.addAll(wordRepo.findWordsTextByUserId(1L));
         List<Homoglyph> homoglyphList = homoglyphRepo.getHomoglyphBySpoofedIn(textRequestDto.getText().chars().mapToObj(e->(char)e).collect(Collectors.toList()));
+        String homoglyphCharset = StringUtils.join(homoglyphList.stream().map(Homoglyph::getSpoofed).collect(Collectors.toList()), "");
 
         List<Integer> distances = new ArrayList<>(dictionary.size());
         LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
@@ -58,7 +60,7 @@ public class TextServiceImpl implements TextService {
              if (!distances.isEmpty()) {
                  minDist= Collections.min(distances);
              }
-            if (minDist != 0) {
+            if (minDist != 0 && StringUtils.containsAny(text.get(i), homoglyphCharset)) {
                 List<String> candidatesForWord = new ArrayList<>();
                 for (int j = 0; j < distances.size(); j++) {
                     if (distances.get(j) == minDist) {
