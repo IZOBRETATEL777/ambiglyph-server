@@ -22,7 +22,7 @@ import static java.lang.Character.*;
 @Service
 @RequiredArgsConstructor
 public class TextServiceImpl implements TextService {
-    private final WordRepo wordService;
+    private final WordRepo wordRepo;
     private final HomoglyphRepo homoglyphRepo;
     private final HomoglyphMapper homoglyphMapper;
 
@@ -32,13 +32,10 @@ public class TextServiceImpl implements TextService {
     @Override
     public TextResponseDto recoverText(TextRequestDto textRequestDto) {
         List<String> text = Arrays.asList(textRequestDto.getText().split("\\b"));
-        List<String> dictionary = new ArrayList<>();
-        List<Homoglyph> homoglyphList = homoglyphRepo.findAll()
-                .stream().filter(h->textRequestDto.getText().indexOf(h.getSpoofed()) != -1).collect(Collectors.toList());
-        for (Word word: wordService.findAll()) {
-            if (word.getUsers().stream().map(User::getId).anyMatch(id->id == textRequestDto.getUserId() || id == 1))
-                dictionary.add(word.getText());
-        }
+        List<String> dictionary = wordRepo.findWordsTextByUserId(textRequestDto.getUserId());
+        dictionary.addAll(wordRepo.findWordsTextByUserId(1L));
+        List<Homoglyph> homoglyphList = homoglyphRepo.getHomoglyphBySpoofedIn(textRequestDto.getText().chars().mapToObj(e->(char)e).collect(Collectors.toList()));
+
         List<Integer> distances = new ArrayList<>(dictionary.size());
         LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
 
