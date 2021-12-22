@@ -1,8 +1,8 @@
 # Ambiglyph Server
 <div align="center">
-<img src="doc/icon.png" alt="icon" style="zoom:25%;"/>
+<img src="doc/icon.png" alt="icon" width="128"/>
 <h2>Ambiglyph</h2>
-
+</div>
 
 
 **Ambiglyph Server** - the implementation of the Ambiglyph project backend. it is fully written in Java with Spring technology thats provide powerful API.
