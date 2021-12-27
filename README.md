@@ -56,6 +56,18 @@ Authentication. In case of successful authentication a JWT token will be provide
 
 ![auth](doc/auth.jpg)
 
+Default passwords:
+
+| Username     | Password    |
+| ------------ | ----------- |
+| ADMIN        | ADMIN       |
+| test         | test123BHOS |
+| client ***** | client      |
+
+***** *This login can be used for unauthorized users to check using only the general word database. Recommended for client applications.* 
+
+
+
 `POST /users/`
 
 Register a new user. The operation accessible only by users with role ADMIN and APP. 
