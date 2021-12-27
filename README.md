@@ -24,6 +24,20 @@ and database of words: http://www.mieliestronk.com/corncob_lowercase.txt
 
 ## Build
 
+### Database migration
+
+For proper work of Ambiglyph backend application it is required to have database called "ambiglyph" with password "12345678" (everything without quotes). Of course, for better security policies this credentials can be changed in a application configuration file  `application.yml`.
+
+Also, it is also required to have some tables.  Firstly, it is necessary to execute `init_db.sq`l script. To execute an SQL script in MySQL the following command can be used:
+
+```sql
+mysql -u yourusername -p yourpassword ambiglyph < path_to_init_db.sql
+```
+
+The same is also should be done with `user.sql`, `words.sql,` `user_word.sql`, `homoglyps database.sql` in exactly the same order.
+
+### Run
+
 Run in the project root directory
 
 ```bash
