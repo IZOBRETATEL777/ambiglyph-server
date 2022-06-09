@@ -9,7 +9,7 @@ server:
 
 spring:
   datasource:
-    jdbc-url: ${SPRING_DATASOURCE_URL}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    jdbcUrl: ${SPRING_DATASOURCE_URL}?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 12345678
