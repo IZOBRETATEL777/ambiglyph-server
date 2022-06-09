@@ -14,7 +14,9 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    private static final long JWT_VALIDITY = 3600000;
+
+    @Value("${jwt.key-validity}")
+    private long JWT_VALIDITY;
 
     @Value("${jwt.secret-key}")
     private String secret;

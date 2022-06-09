@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/changeset/init_db.sql
+  - include:
+      file: classpath:/db/changelog/changeset/homoglyps_database.sql
+  - include:
+      file: classpath:/db/changelog/changeset/user.sql
+  - include:
+      file: classpath:/db/changelog/changeset/words.sql
+  - include:
+      file: classpath:/db/changelog/changeset/user_word.sql

@@ -1,5 +1,6 @@
-delete from user_word;
-delete from word;
+-- liquibase formatted sql
+-- changeset Roman:populate-word-table
+
 ALTER TABLE word AUTO_INCREMENT = 1;
 insert into word(word) values
 ("a"),
