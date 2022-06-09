@@ -13,30 +13,18 @@ The server uses open database of words and homoglyps: http://homoglyphs.net/
 
 and database of words: http://www.mieliestronk.com/corncob_lowercase.txt
 
-## Requirements
 
-- Java 11
+## Build
+
+### Manual Build/Run
+
+**Requirements**
+
+- Java 17
 
 - MySQL Server 8
 
 - Maven 3.8.+
-
-
-## Build
-
-### Database migration
-
-For proper work of Ambiglyph backend application it is required to have database called "ambiglyph" with password "12345678" (everything without quotes). Of course, for better security policies this credentials can be changed in a application configuration file  `application.yml`.
-
-Also, it is also required to have some tables.  Firstly, it is necessary to execute `init_db.sq`l script. To execute an SQL script in MySQL the following command can be used:
-
-```sql
-mysql -u yourusername -p yourpassword ambiglyph < path_to_init_db.sql
-```
-
-The same is also should be done with `user.sql`, `words.sql,` `user_word.sql`, `homoglyps_database.sql` in exactly the same order.
-
-### Run
 
 Run in the project root directory
 
@@ -44,9 +32,22 @@ Run in the project root directory
 mvn spring-boot:run
 ```
 
+### Docker Image
+
+**Requirements**
+
+- Docker
+
+Just run in the project folder:
+
+`````bash
+docker build -t ambiglyph-server -f Dockerfile
+docker run -p 8081:8081 -t ambiglyph-server
+`````
+
 ## Usage
 
-This is simple backend application that uses REST API. Hence, it supports only REST requests. To try it out without any front application application you can use Inomina or Postman.
+This is simple backend application that uses REST API. Hence, it supports only REST requests. To try it out without any front application application you can use Inomina or Postman. All necessary documentation provided in Swagger (OpenApi v3). You can access it like `http://api-address:8081/ambiglyph-server/swagger-ui/index.html`.
 
 Overall, the application supports **CRUD** operations on database of words and users. It is required to be authenticated and use given JWT-token in headers  Some basic operations:
 
@@ -64,7 +65,7 @@ Default passwords:
 | test         | test123BHOS |
 | client ***** | client      |
 
-***** *This login can be used for unauthorized users to check using only the general word database. Recommended for client applications.* 
+`*` This login can be used for unauthorized users to check using only the general word database. Recommended for client applications.* 
 
 
 
