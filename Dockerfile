@@ -1,10 +1,6 @@
-FROM amazoncorretto:17 as build
-ENV HOME=/usr/app
-RUN mkdir -p $HOME
-WORKDIR $HOME
-ADD . $HOME
-CMD ["mvn package"]
+FROM maven:3.8.3-openjdk-17
+WORKDIR /ambiglyph-server
+COPY . .
+RUN mvn clean install
+CMD mvn spring-boot:run
 
-FROM amazoncorretto:17
-COPY --from=build /usr/app/target/ambiglyph-server-0.0.1-SNAPSHOT.jar /app/runner.jar
-ENTRYPOINT java -jar /app/runner.jar
