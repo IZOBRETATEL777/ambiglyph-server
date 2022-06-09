@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,10 +45,41 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        final String[] SWAGGER_WHITELIST = {
+                // -- Swagger UI v2
+                "/v2/api-docs",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/configuration/ui",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/courses",
+                "/api/courses",
+                // -- Swagger UI v3 (OpenAPI)
+                "/v3/api-docs/**",
+                "/swagger-ui/**"
+        };
 
-        http.authorizeRequests().antMatchers("/authenticate").permitAll()
+        http.authorizeRequests()
+                .antMatchers(SWAGGER_WHITELIST).permitAll()
+                .antMatchers("/authenticate").permitAll()
                 .anyRequest().authenticated();
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v3/api-docs")
+                .antMatchers( "/webjars/v3/api-docs")
+                //.antMatchers("/swagger-resources/**")//
+                .antMatchers( "/v3/api-docs/webjars")
+                .antMatchers("/swagger-ui ")
+                .antMatchers( "/webjars/**")
+                //    .antMatchers("/swagger-ui/*")
+                //     .antMatchers( "swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config")
+                .antMatchers("/configuration/**")//
+                .antMatchers("/webjars/**")//
+                .antMatchers("/public");
     }
 }
