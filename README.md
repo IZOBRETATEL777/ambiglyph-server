@@ -34,7 +34,7 @@ Also, it is also required to have some tables.  Firstly, it is necessary to exec
 mysql -u yourusername -p yourpassword ambiglyph < path_to_init_db.sql
 ```
 
-The same is also should be done with `user.sql`, `words.sql,` `user_word.sql`, `homoglyps database.sql` in exactly the same order.
+The same is also should be done with `user.sql`, `words.sql,` `user_word.sql`, `homoglyps_database.sql` in exactly the same order.
 
 ### Run
 

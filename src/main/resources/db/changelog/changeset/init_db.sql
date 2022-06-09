@@ -1,6 +1,8 @@
-# drop table user, word, user_word;
+-- liquibase formatted sql
+-- changeset Roman:Init-core-tables
 
-create table user
+
+create table if not exists user
 (
     id       int          NOT NULL AUTO_INCREMENT,
     login    varchar(250) NOT NULL UNIQUE,
@@ -10,14 +12,14 @@ create table user
     PRIMARY KEY (id)
 );
 
-create table word
+create table if not exists word
 (
     id   int          NOT NULL AUTO_INCREMENT,
     word varchar(250) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 
-create table user_word
+create table if not exists user_word
 (
     user_id int NOT NULL,
     word_id int NOT NULL,

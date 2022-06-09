@@ -1,4 +1,5 @@
-drop table homoglyph;
+-- liquibase formatted sql
+-- changeset Roman:Init-homoglyph-table
 
 create table homoglyph (
     id int NOT NULL AUTO_INCREMENT,
