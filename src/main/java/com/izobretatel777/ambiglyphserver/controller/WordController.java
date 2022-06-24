@@ -22,7 +22,7 @@ public class WordController {
 
     private final WordService wordService;
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @Operation(
             summary = "Delete a User",
             description = "Delete a User by ID. Only for ADMINs",
