@@ -22,10 +22,10 @@ public class WordController {
 
     private final WordService wordService;
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     @Operation(
-            summary = "Delete a User",
-            description = "Delete a User by ID. Only for ADMINs",
+            summary = "Get added words",
+            description = "Get all words added by user",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public List<WordResponseDto> getWords(){
