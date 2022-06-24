@@ -8,11 +8,13 @@ import com.izobretatel777.ambiglyphserver.dto.WordResponseDto;
 import com.izobretatel777.ambiglyphserver.mapper.WordMapper;
 import com.izobretatel777.ambiglyphserver.service.WordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,20 +44,25 @@ public class WordServiceImpl implements WordService {
 
     @Override
     public Long saveWord(WordRequestDto wordRequestDto) {
-        Word word = null;
-        var matches = wordRepo.findAll().stream().filter(c->c.getText().equals(wordRequestDto.getText())).collect(Collectors.toList());
-        if (!matches.isEmpty()) {
-            word = matches.get(0);
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Long userId = userRepo.findIdByLogin(authentication.getName());
+            Long wordId = wordRepo.findWordsByUserIdAndText(userId, wordRequestDto.getText());
+            Word word;
+            if (wordId != null && wordRepo.findById(wordId).isPresent()) {
+                word = wordRepo.findById(wordId).get();
+            } else {
+                word = new Word();
+                word.setText(wordRequestDto.getText());
+                word.setUsers(new LinkedList<>());
+            }
+
+            word.getUsers().add(userRepo.getById(userId));
+            return wordRepo.save(word).getId();
         }
-        else {
-            word = new Word();
-            word.setText(wordRequestDto.getText());
-            word.setUsers(new LinkedList<>());
+        catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = userRepo.findIdByLogin(authentication.getName());
-        word.getUsers().add(userRepo.getById(userId));
-        return wordRepo.save(word).getId();
     }
 
     @Override

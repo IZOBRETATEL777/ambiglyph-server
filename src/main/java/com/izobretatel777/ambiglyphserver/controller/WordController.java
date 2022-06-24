@@ -4,6 +4,8 @@ import com.izobretatel777.ambiglyphserver.dto.WordRequestDto;
 import com.izobretatel777.ambiglyphserver.dto.WordResponseDto;
 import com.izobretatel777.ambiglyphserver.service.WordService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +64,11 @@ public class WordController {
             description = "Save new word. For ADMINs and USERs",
             security = @SecurityRequirement(name = "bearerAuth")
     )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Word was added successfully"),
+            @ApiResponse(responseCode = "401", description = "Not a USER or ADMIN"),
+            @ApiResponse(responseCode = "409", description = "Word is already used")
+    })
     public long saveWord(@RequestBody WordRequestDto WordRequestDto){
         return wordService.saveWord(WordRequestDto);
     }
